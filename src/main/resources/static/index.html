@@ -1,0 +1,240 @@
+<html>
+<head>
+    <title>Рив Гош</title>
+    <link rel="icon" type="image/png" href="prefabs/riv-gosh.png">
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+</head>
+<body>
+<table border="0" width="1200" cellpadding="0" cellspacing="0" align="center" bgcolor="#ff8000">
+    <tr>
+        <!-- Логотип -->
+        <td width="150" align="center">
+            <img src="prefabs/riv-gosh.png" alt="Логотип" width="90" height="90">
+        </td>
+        <!-- Заголовок -->
+        <td align="center" colspan="2">
+            <h1>РИВ ГОШ</h1>
+        </td>
+        <!-- Логин/Пароль -->
+        <td width="200">
+            <table cellpadding="5" width="100%">
+                <tr>
+                    <td align="right"><input type="text" value="Логин"></td>
+                </tr>
+                <tr>
+                    <td align="right"><input type="password" value="Пароль"></td>
+                </tr>
+                <tr>
+                    <td align="right"><input type="submit" value="Войти"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <!-- Строка для графы поиска -->
+    <tr>
+        <td colspan="4" align="center">
+            <div class="search-container">
+                <form name="search_form" method="get" action="/products">
+                    <input type="search" id="search-box" name="search_q" class="search-box" placeholder="Введите первую букву товара или услуги..." required>
+                    <input type="submit" class="search-button" value="Поиск">
+                </form>
+                <div id="suggestions" class="suggestions" style="display: none;"></div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<script>
+    const searchInput = document.getElementById("search-box");
+    const suggestionsContainer = document.getElementById("suggestions");
+
+    searchInput.addEventListener("input", async function() {
+        const query = searchInput.value.trim();
+
+        if (query.length > 0) {
+            // Отправка запроса на сервер с введенным текстом
+            const response = await fetch(`/products/search_suggestions?query=${query}`);
+            const suggestions = await response.json();
+
+            // Очистка старых предложений
+            suggestionsContainer.innerHTML = '';
+
+            if (suggestions.length > 0) {
+                // Показать предложения
+                suggestions.forEach(item => {
+                    const suggestionItem = document.createElement("div");
+                    suggestionItem.classList.add("suggestion-item");
+
+                    // Создаем элемент для изображения товара
+                    const productImage = document.createElement("img");
+                    productImage.src = item.image;  // Используем изображение товара
+                    productImage.alt = item.name;
+                    productImage.classList.add("suggestion-image");
+
+                    // Создаем элемент для названия товара
+                    const productName = document.createElement("span");
+                    productName.textContent = item.name;
+                    productName.classList.add("suggestion-name");
+
+                    // Добавляем картинку и название в контейнер предложения
+                    suggestionItem.appendChild(productImage);
+                    suggestionItem.appendChild(productName);
+
+                    // Событие при клике на предложение
+                    suggestionItem.addEventListener("click", function() {
+                        searchInput.value = item.name;  // Заполнить поле
+                        suggestionsContainer.style.display = 'none';  // Скрыть предложения
+                    });
+
+                    // Добавляем предложение в контейнер
+                    suggestionsContainer.appendChild(suggestionItem);
+                });
+                suggestionsContainer.style.display = 'block';
+            } else {
+                suggestionsContainer.style.display = 'none';
+            }
+        } else {
+            suggestionsContainer.style.display = 'none';
+        }
+    });
+</script>
+
+<style>
+    #suggestions {
+    position: absolute;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 1000px; /* Фиксированная ширина контейнера с предложениями */
+    background-color: white;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .suggestion-item {
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .suggestion-item:hover {
+    background-color: #f0f0f0;
+  }
+
+  .suggestion-image {
+    width: 50px; /* Размер картинки */
+    height: 50px;
+    margin-right: 20px; /* Расстояние между картинкой и текстом */
+  }
+
+  .suggestion-name {
+    font-size: 16px; /* Размер текста */
+    max-width: calc(100% - 70px); /* Оставляем место для картинки и отступа */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+</style>
+
+
+
+<table class="custom-nav" border="0" width="1200" cellpadding="5" align="center" bgcolor="ffa756">
+        <tr>
+            <td align="center"><a href="index.html">Главная</a></td>
+            <td align="center"><a href="catalog.html">Каталог</a></td>
+            <td align="center"><a href="contact.html">Контакты</a></td>
+        </tr>
+    </table> 
+
+    <!-- поиск -->
+<!--    <div class="search-container">-->
+<!--        <form name="search_form" method="post" action="search.php">-->
+<!--            <input type="search" name="search_q" class="search-box" placeholder="Введите первую букву товара или услуги..." required>-->
+<!--            <input type="submit" class="search-button" value="Поиск">-->
+<!--        </form>-->
+<!--    </div>-->
+
+<BR>
+<table border="0" width="1200" cellpadding="5" cellpadding="0" align="center">
+	<tr>
+		<td width="150" cellpadding="5" valign="top" align="center">
+			<a href="aboutUs.html">О нас</a><BR>
+			<a href="history.html">История фирмы</a><BR>
+			<a href="employee.html">Сотрудники</a><BR>
+		<td>
+		<td><H1  align="center">Главная</H1>
+			<div class="center_page">
+       <!-- О компании -->
+	   <section class="section">
+		<h2>О компании</h2>
+		<p>Рив Гош — это один из ведущих российских ритейлеров в сфере парфюмерии и косметики, который более 20 лет радует клиентов широким ассортиментом товаров для красоты и ухода. Основанная в 1995 году, компания успешно зарекомендовала себя как надежный поставщик качественной продукции от мировых и отечественных брендов.</p>
+		<p>Ассортимент Рив Гош включает:</p>
+        <ul>
+			<li>Парфюмерия — ароматы от известных брендов для мужчин и женщин, как культовые классические композиции, так и новинки;</li>
+			<li>Косметика — декоративная косметика для лица, глаз, губ и ногтей от ведущих марок, а также уникальные предложения в области органической и натуральной косметики;</li>
+			<li>Уход за кожей — широкий выбор средств для ухода за кожей лица и тела, включая очищение, увлажнение, антивозрастные продукты, солнцезащитные средства и многое другое;</li>
+            <li>Уход за волосами — шампуни, кондиционеры, маски, средства для укладки и окрашивания от ведущих профессиональных брендов;</li>
+        </ul>
+	</section>
+
+    
+
+	<!-- Услуги -->
+	<section class="section bg-light">
+		<h2>Наши преимущества</h2>
+		<!-- Многоуровневый список -->
+        <ul>
+            <li>Сервис и поддержка клиентов</li>
+            <li>Инновации и развитие
+                <ul type="square">
+                    <li>Онлайн-магазин</li>
+                    <li>Программа лояльности</li>
+                </ul>
+            </li>
+            <li>Ответственный подход к экологии</li>
+        </ul>
+	</section>
+
+		<!-- Сам магазин -->
+        <div align="center">
+            <img src="prefabs/shop.webp" alt="О компании" width="600">
+        </div>
+    </div>
+  
+    </td>
+	</tr>
+</table>
+  
+  <footer class="footer">
+	<div>
+		<div class="footer_menu">
+			<a href="https://rivegauche.ru/brands" style="text-decoration: none; color: black";>Бренды</a>
+			<a href="https://advcake.ru/lp/rivegauche/" style="text-decoration: none; color: black">Партнерская программа</a>
+			<a href="https://rivegauche.ru/work" style="text-decoration: none; color: black">Работа у нас</a>
+			<a href="contact.html" style="text-decoration: none; color: black">Контакты</a>
+		</div>
+		<div class="footer_text">
+			<a>©Все права защищены 2024 РИВГОШ</a>
+		</div>
+	</div>
+
+</footer>
+
+<script>
+    function showTab(tabName) {
+        var tabs = document.querySelectorAll('.tab-content');
+        tabs.forEach(function(tab) {
+            tab.classList.remove('active');
+        });
+        // Показывает выбранную форму
+        document.getElementById(tabName).classList.add('active');
+    }
+</script>
+
+</body>
+
+</html>
