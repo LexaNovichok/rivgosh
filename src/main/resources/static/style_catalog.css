@@ -6,7 +6,52 @@
 }
 
 .product-item {
-    text-align: center;
+    width: 200px; /* Можно изменить по своему усмотрению */
+        padding: 15px;
+        margin: 10px;
+        border: 1px solid #ddd; /* Обводка карточки */
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Эффект при наведении на карточку */
+.product-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Оформление цены */
+.product-price {
+    font-size: 18px;
+    color: #ff5733;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Кнопка "Добавить в корзину" */
+.add-to-cart-btn {
+    padding: 10px 20px;
+    background-color: #ff8000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+/* Эффект при наведении на кнопку */
+.add-to-cart-btn:hover {
+    background-color: #e67e00;
+}
+
+/* Эффект при нажатии на кнопку */
+.add-to-cart-btn:active {
+    transform: scale(0.98);
 }
 
 .product-image {
@@ -167,4 +212,20 @@ ul {
 
 .search-button:hover {
     background-color: #ffa756;
+}
+
+.add-product-button-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.add-product-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 15px 30px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
 }

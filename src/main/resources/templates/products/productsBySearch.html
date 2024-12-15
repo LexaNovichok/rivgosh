@@ -69,7 +69,8 @@
 
                   // Создаем элемент для изображения товара
                   const productImage = document.createElement("img");
-                  productImage.src = item.image;  // Используем изображение товара
+                  productImage.src = `prefabs/${item.image}`;  // Используем изображение товара
+                  console.log(productImage.src);
                   productImage.alt = item.name;
                   productImage.classList.add("suggestion-image");
 
@@ -145,7 +146,7 @@
 <table class="custom-nav" border="0" width="1200" cellpadding="5" align="center" bgcolor="ffa756">
   <tr>
     <td align="center"><a href="index.html">Главная</a></td>
-    <td align="center"><a href="catalog.html">Каталог</a></td>
+    <td align="center"><a href="/products?catalog">Каталог</a></td>
     <td align="center"><a href="contact.html">Контакты</a></td>
   </tr>
 </table>
@@ -163,23 +164,34 @@
       <hr>
   </tr>
 
-  <!--каталог товаров -->
+  <!-- каталог товаров -->
   <table border="0" width="900" cellpadding="5"  align="center">
     <tr>
       <td>
-        <p class="bestsellers">Результаты поиска</p>
+        <p class="bestsellers"></p>
 
         <div class="product-grid">
           <div class="product-item" th:each="product : ${products}">
-            <a th:href="@{'/product' + ${product.id} + '.html'}" target="_blank">
-              <img th:src="${product.image}" th:alt="${product.shortDescription}" class="product-image">
+            <a th:href="@{/products/product/{id}(id=${product.id})}" target="_blank">
+              <img th:src="@{'/prefabs/' + ${product.image}}" th:alt="${product.shortDescription}" class="product-image">
             </a>
-            <p><a th:href="@{'/product' + ${product.id} + '.html'}" th:text="${product.name}"></a></p>
+            <p class="product-name">
+              <a th:href="@{/products/product/{id}(id=${product.id})}" th:text="${product.name}"></a>
+            </p>
+            <!-- Цена товара -->
+            <p class="product-price" th:text="${product.price} + ' ₽'">Цена</p>
+            <!-- Кнопка добавления в корзину -->
+            <button class="add-to-cart-btn" th:data-id="${product.id}">Добавить в корзину</button>
+
           </div>
         </div>
       </td>
     </tr>
   </table>
+
+  <div class="add-product-button-container">
+    <a href="/products/add" class="add-product-button">Добавить товар</a>
+  </div>
 </table>
 
 

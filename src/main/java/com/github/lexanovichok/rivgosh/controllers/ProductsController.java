@@ -7,8 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/products")
@@ -51,7 +56,52 @@ public class ProductsController {
     @GetMapping("/catalog")
     public String showCatalog(Model model) {
         List<Product> products = productService.getAllProducts();
+        System.out.println("Products from DB: " + products);
         model.addAttribute("products", products);
-        return "catalog";
+        return "products/catalog";
+    }
+
+    @GetMapping("/product/{id}")
+    public String getProduct(@PathVariable Integer id, Model model) {
+        Product product = repo.findById(id)
+                .orElse(null);
+
+
+        if (product == null) {
+            model.addAttribute("errorMessage", "Product not found with id: " + id);
+            return "error";
+        }
+
+
+        model.addAttribute("product", product);
+        return "products/product";
+    }
+
+    @PostMapping("/add")
+    public String addProduct(@ModelAttribute Product product, @RequestParam("image") MultipartFile imageFile, Model model) throws IOException {
+
+        // Сохранение файла
+        String originalFilename = imageFile.getOriginalFilename();
+        String uniqueFilename = UUID.randomUUID() + "_" + originalFilename;
+        String uploadDir = "path/to/your/upload/directory"; // Замените на ваш путь
+        Path filePath = Paths.get(uploadDir, uniqueFilename);
+        imageFile.transferTo(filePath);
+
+        // Обновление модели продукта
+        product.setImage(uniqueFilename);
+
+        // Сохранение продукта в базе данных
+        productService.addProduct(product);
+
+        // Display success message or redirect to product list view
+        model.addAttribute("message", "Товар успешно добавлен!");
+        return "redirect:/products/catalog"; // Redirect to catalog page after successful addition
+    }
+
+    @GetMapping("/add")
+    public String showAddProductForm(Model model) {
+        Product newProduct = new Product();
+        model.addAttribute("product", newProduct);
+        return "products/addProduct";
     }
 }
