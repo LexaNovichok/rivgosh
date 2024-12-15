@@ -31,67 +31,34 @@
       </table>
     </td>
   </tr>
+
+  <tr>
+<!--    <td colspan="4" align="center">-->
+<!--      <div class="search-container">-->
+<!--        <form name="search_form" method="get" action="/products">-->
+<!--          <div>-->
+<!--            <input type="search" id="search-box" name="search_q" class="search-box" placeholder="Введите первую букву товара или услуги...">-->
+<!--            <input type="submit" class="search-button" value="Поиск">-->
+<!--          </div>-->
+
+<!--          <div id="category-form">-->
+<!--            <label for="category">Выберите категорию:</label>-->
+<!--            <select id="category" name="category">-->
+<!--              <option value="" th:selected="${category == null}">Все категории</option>-->
+<!--              <option value="Мужские ароматы" th:selected="${category == 'Мужские ароматы'}">Мужские ароматы</option>-->
+<!--              <option value="Женские ароматы" th:selected="${category == 'Женские ароматы'}">Женские ароматы</option>-->
+<!--              <option value="Нейтральные духи" th:selected="${category == 'Нейтральные духи'}">Нейтральные духи</option>-->
+<!--            </select>-->
+<!--            <button type="submit">Применить</button>-->
+<!--          </div>-->
+<!--        </form>-->
+<!--        <div id="suggestions" class="suggestions" style="display: none;"></div>-->
+<!--      </div>-->
+<!--    </td>-->
+  </tr>
+
 </table>
 
-<script>
-  const searchInput = document.getElementById("search-box");
-const suggestionsContainer = document.getElementById("suggestions");
-
-searchInput.addEventListener("input", async function() {
-    const query = searchInput.value.trim();
-
-    if (query.length > 0) {
-        // Правильное построение URL с использованием Template Literals
-        const url = `/products/search_suggestions?query=${encodeURIComponent(query)}`; //кодируем query
-        try {
-            const response = await fetch(url);
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const suggestions = await response.json();
-
-            suggestionsContainer.innerHTML = '';
-
-            if (suggestions.length > 0) {
-                suggestions.forEach(item => {
-                    const suggestionItem = document.createElement("div");
-                    suggestionItem.classList.add("suggestion-item");
-
-                    const productImage = document.createElement("img");
-                    productImage.src = `/prefabs/${item.image}`; // Исправлено: добавлен слэш
-                    productImage.alt = item.name;
-                    productImage.classList.add("suggestion-image");
-
-                    const productName = document.createElement("span");
-                    productName.textContent = item.name;
-                    productName.classList.add("suggestion-name");
-
-                    suggestionItem.appendChild(productImage);
-                    suggestionItem.appendChild(productName);
-
-                    suggestionItem.addEventListener("click", function() {
-                        searchInput.value = item.name;
-                        suggestionsContainer.style.display = 'none';
-                    });
-
-                    suggestionsContainer.appendChild(suggestionItem);
-                });
-                suggestionsContainer.style.display = 'block';
-            } else {
-                suggestionsContainer.style.display = 'none';
-            }
-        } catch (error) {
-            console.error("Error fetching suggestions:", error);
-            suggestionsContainer.innerHTML = '<div class="suggestion-item">Ошибка загрузки предложений</div>';
-            suggestionsContainer.style.display = 'block';
-        }
-    } else {
-        suggestionsContainer.style.display = 'none';
-    }
-});
-</script>
 
 <style>
   /* Категории */
@@ -124,16 +91,15 @@ searchInput.addEventListener("input", async function() {
 
 
   #suggestions {
-    position: absolute;
-    border: 1px solid #ccc;
-    max-height: 200px;
-    overflow-y: auto;
-    width: 100%; /* Делаем ширину 100% от родительского элемента */
-    max-width: 500px; /* Ограничиваем максимальную ширину */
-    background-color: white;
-    z-index: 1000; /* Убедитесь, что z-index достаточно высок для отображения поверх других элементов */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
+  position: absolute;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  width: 1000px; /* Фиксированная ширина контейнера с предложениями */
+  background-color: white;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
   .suggestion-item {
       padding: 8px;
@@ -171,14 +137,8 @@ searchInput.addEventListener("input", async function() {
   </tr>
 </table>
 
-<table class="custom-nav" border="0" width="1200" cellpadding="5" align="center" bgcolor="f8f8f8">
-  <!-- Строка для графы поиска и категории -->
+<table border="0" width="1200" cellpadding="0" cellspacing="0" align="center" bgcolor="#f8f8f8">
   <tr>
-    <td width="150" cellpadding="5" valign="top" align="center">
-      <a href="aboutUs.html">О нас</a>
-      <a href="history.html">История фирмы</a>
-      <a href="employee.html">Сотрудники</a>
-    </td>
 
     <td colspan="4" align="center">
       <div class="search-container">
@@ -202,9 +162,65 @@ searchInput.addEventListener("input", async function() {
         <div id="suggestions" class="suggestions" style="display: none;"></div>
       </div>
     </td>
+
   </tr>
 </table>
 
+<script>
+  const searchInput = document.getElementById("search-box");
+  const suggestionsContainer = document.getElementById("suggestions");
+
+  searchInput.addEventListener("input", async function() {
+      const query = searchInput.value.trim();
+
+      if (query.length > 0) {
+          // Отправка запроса на сервер с введенным текстом
+          const response = await fetch(`/products/search_suggestions?query=${query}`);
+          const suggestions = await response.json();
+
+          // Очистка старых предложений
+          suggestionsContainer.innerHTML = '';
+
+          if (suggestions.length > 0) {
+              // Показать предложения
+              suggestions.forEach(item => {
+                  const suggestionItem = document.createElement("div");
+                  suggestionItem.classList.add("suggestion-item");
+
+                  // Создаем элемент для изображения товара
+                  const productImage = document.createElement("img");
+                  productImage.src = `prefabs/${item.image}`;  // Используем изображение товара
+                  console.log(productImage.src);
+                  productImage.alt = item.name;
+                  productImage.classList.add("suggestion-image");
+
+                  // Создаем элемент для названия товара
+                  const productName = document.createElement("span");
+                  productName.textContent = item.name;
+                  productName.classList.add("suggestion-name");
+
+                  // Добавляем картинку и название в контейнер предложения
+                  suggestionItem.appendChild(productImage);
+                  suggestionItem.appendChild(productName);
+
+                  // Событие при клике на предложение
+                  suggestionItem.addEventListener("click", function() {
+                      searchInput.value = item.name;  // Заполнить поле
+                      suggestionsContainer.style.display = 'none';  // Скрыть предложения
+                  });
+
+                  // Добавляем предложение в контейнер
+                  suggestionsContainer.appendChild(suggestionItem);
+              });
+              suggestionsContainer.style.display = 'block';
+          } else {
+              suggestionsContainer.style.display = 'none';
+          }
+      } else {
+          suggestionsContainer.style.display = 'none';
+      }
+  });
+</script>
 
 <BR>
 <table border="0" width="1200" cellpadding="5" align="center">

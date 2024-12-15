@@ -57,6 +57,7 @@
                   // Создаем элемент для изображения товара
                   const productImage = document.createElement("img");
                   productImage.src = `prefabs/${item.image}`;  // Используем изображение товара
+                  console.log(productImage.src);
                   productImage.alt = item.name;
                   productImage.classList.add("suggestion-image");
 
@@ -87,6 +88,7 @@
       }
   });
 </script>
+
 
 <style>
   /* Категории */
@@ -128,6 +130,7 @@
     background-color: white;
     z-index: 1000; /* Убедитесь, что z-index достаточно высок для отображения поверх других элементов */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    left: 0; /* Выравниваем по левому краю input */
   }
 
   .suggestion-item {
@@ -167,7 +170,6 @@
 </table>
 
 <table class="custom-nav" border="0" width="1200" cellpadding="5" align="center" bgcolor="f8f8f8">
-  <!-- Строка для графы поиска и категории -->
   <tr>
     <td width="150" cellpadding="5" valign="top" align="center">
       <a href="aboutUs.html">О нас</a>
@@ -182,6 +184,7 @@
             <input type="search" id="search-box" name="search_q" class="search-box" placeholder="Введите первую букву товара или услуги...">
             <input type="submit" class="search-button" value="Поиск">
           </div>
+          <div id="suggestions" class="suggestions" style="display: none;"></div>
 
           <div id="category-form">
             <label for="category">Выберите категорию:</label>
@@ -191,10 +194,10 @@
               <option value="Женские ароматы" th:selected="${category == 'Женские ароматы'}">Женские ароматы</option>
               <option value="Нейтральные духи" th:selected="${category == 'Нейтральные духи'}">Нейтральные духи</option>
             </select>
-            <button type="submit">Применить</button>
+
           </div>
+
         </form>
-        <div id="suggestions" class="suggestions" style="display: none;"></div>
       </div>
     </td>
   </tr>
