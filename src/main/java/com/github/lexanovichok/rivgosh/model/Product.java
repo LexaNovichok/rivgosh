@@ -75,4 +75,12 @@ public class Product {
     public void setPrice(Float price) {
         this.price = price;
     }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 }

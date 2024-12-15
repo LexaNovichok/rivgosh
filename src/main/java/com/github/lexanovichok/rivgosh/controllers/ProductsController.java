@@ -27,23 +27,65 @@ public class ProductsController {
         this.productService = productService;
     }
 
-    @GetMapping({"", "/"})
-    public String showProductListBySearch(
-            @RequestParam(value = "search_q", required = false) String search,
-            Model model) {
-        List<Product> products;
+//    @GetMapping("/category/{category}")
+//    public String showProductsByCategory(@PathVariable String category, Model model) {
+//        List<Product> products;
+//
+//        if (!category.equalsIgnoreCase("Все категории")) {
+//            products = repo.findByCategory(category);
+//        } else {
+//            products = repo.findAll();
+//        }
+//
+//        model.addAttribute("products", products);
+//        model.addAttribute("selectedCategory", category);
+//        return "products/productBySearch";
+//    }
+//
+//
+//    @GetMapping({"", "/"})
+//    public String showProductListBySearch(
+//            @RequestParam(value = "search_q", required = false) String search,
+//            Model model) {
+//        List<Product> products;
+//
+//        if (search != null && !search.isEmpty()) {
+//            // Фильтруем товары по названию
+//            products = repo.findByNameContainingIgnoreCase(search);
+//        } else {
+//            // Возвращаем все товары, если поиска нет
+//            products = repo.findAll();
+//        }
+//
+//        model.addAttribute("products", products);
+//        return "products/productsBySearch"; // Thymeleaf-шаблон
+//    }
 
-        if (search != null && !search.isEmpty()) {
-            // Фильтруем товары по названию
-            products = repo.findByNameContainingIgnoreCase(search);
-        } else {
-            // Возвращаем все товары, если поиска нет
-            products = repo.findAll();
+    @GetMapping({"", "/"})
+    public String getProducts(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String search_q,
+            Model model) {
+
+        List<Product> filteredProducts = repo.findAll();
+
+        if (category != null && !category.isEmpty()) {
+            filteredProducts = filteredProducts.stream()
+                    .filter(product -> product.getCategory().equalsIgnoreCase(category))
+                    .toList();
         }
 
-        model.addAttribute("products", products);
+        if (search_q != null && !search_q.isEmpty()) {
+            filteredProducts = filteredProducts.stream()
+                    .filter(product -> product.getName().toLowerCase().contains(search_q.toLowerCase()))
+                    .toList();
+        }
+
+        model.addAttribute("products", filteredProducts);
+        model.addAttribute("selectedCategory", category);
         return "products/productsBySearch"; // Thymeleaf-шаблон
     }
+
 
     @GetMapping("/search_suggestions")
     @ResponseBody
@@ -53,13 +95,6 @@ public class ProductsController {
     }
 
 
-    @GetMapping("/catalog")
-    public String showCatalog(Model model) {
-        List<Product> products = productService.getAllProducts();
-        System.out.println("Products from DB: " + products);
-        model.addAttribute("products", products);
-        return "products/catalog";
-    }
 
     @GetMapping("/product/{id}")
     public String getProduct(@PathVariable Integer id, Model model) {
@@ -104,4 +139,6 @@ public class ProductsController {
         model.addAttribute("product", newProduct);
         return "products/addProduct";
     }
+
+
 }
