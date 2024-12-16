@@ -22,11 +22,6 @@ public class Product {
     @Column(name = "image")
     private String image = "";
 
-    @Column(name = "price")
-    private Float price;
-
-    @Column(name = "category")
-    private String category;
 
     public String getImage() {
         return image;
@@ -66,21 +61,5 @@ public class Product {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Float getPrice() {
-        return price;
-    }
-
-    public void setPrice(Float price) {
-        this.price = price;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 }
