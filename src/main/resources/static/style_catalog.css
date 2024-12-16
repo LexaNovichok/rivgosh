@@ -15,7 +15,11 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         text-align: center;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 400px;
+        position: relative;
 }
+
+
 
 /* Эффект при наведении на карточку */
 .product-item:hover {
@@ -26,9 +30,15 @@
 /* Оформление цены */
 .product-price {
     font-size: 18px;
-    color: #ff5733;
-    font-weight: bold;
-    margin-top: 10px;
+        color: #ff5733;
+        font-weight: bold;
+        position: absolute;
+        bottom: 60px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 160px;
+        text-align: center;
+
 }
 
 /* Кнопка "Добавить в корзину" */
@@ -42,6 +52,11 @@
     font-size: 16px;
     margin-top: 10px;
     transition: background-color 0.3s ease;
+     position: absolute; /* Абсолютное позиционирование */
+        bottom: 15px; /* Устанавливаем кнопку у нижнего края карточки */
+        left: 50%; /* Центрируем кнопку по горизонтали */
+        transform: translateX(-50%); /* Выравнивание по центру */
+        width: 200px;
 }
 
 /* Эффект при наведении на кнопку */
@@ -49,15 +64,11 @@
     background-color: #e67e00;
 }
 
-/* Эффект при нажатии на кнопку */
-.add-to-cart-btn:active {
-    transform: scale(0.98);
-}
 
 .product-image {
     width: 200px;
     height: 200px;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .product-item a {

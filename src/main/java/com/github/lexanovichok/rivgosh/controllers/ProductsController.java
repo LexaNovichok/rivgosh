@@ -27,40 +27,6 @@ public class ProductsController {
         this.productService = productService;
     }
 
-//    @GetMapping("/category/{category}")
-//    public String showProductsByCategory(@PathVariable String category, Model model) {
-//        List<Product> products;
-//
-//        if (!category.equalsIgnoreCase("Все категории")) {
-//            products = repo.findByCategory(category);
-//        } else {
-//            products = repo.findAll();
-//        }
-//
-//        model.addAttribute("products", products);
-//        model.addAttribute("selectedCategory", category);
-//        return "products/productBySearch";
-//    }
-//
-//
-//    @GetMapping({"", "/"})
-//    public String showProductListBySearch(
-//            @RequestParam(value = "search_q", required = false) String search,
-//            Model model) {
-//        List<Product> products;
-//
-//        if (search != null && !search.isEmpty()) {
-//            // Фильтруем товары по названию
-//            products = repo.findByNameContainingIgnoreCase(search);
-//        } else {
-//            // Возвращаем все товары, если поиска нет
-//            products = repo.findAll();
-//        }
-//
-//        model.addAttribute("products", products);
-//        return "products/productsBySearch"; // Thymeleaf-шаблон
-//    }
-
     @GetMapping({"", "/"})
     public String getProducts(
             @RequestParam(required = false) String category,
@@ -107,37 +73,22 @@ public class ProductsController {
             return "error";
         }
 
-
         model.addAttribute("product", product);
         return "products/product";
     }
 
-    @PostMapping("/add")
-    public String addProduct(@ModelAttribute Product product, @RequestParam("image") MultipartFile imageFile, Model model) throws IOException {
-
-        // Сохранение файла
-        String originalFilename = imageFile.getOriginalFilename();
-        String uniqueFilename = UUID.randomUUID() + "_" + originalFilename;
-        String uploadDir = "path/to/your/upload/directory"; // Замените на ваш путь
-        Path filePath = Paths.get(uploadDir, uniqueFilename);
-        imageFile.transferTo(filePath);
-
-        // Обновление модели продукта
-        product.setImage(uniqueFilename);
-
-        // Сохранение продукта в базе данных
-        productService.addProduct(product);
-
-        // Display success message or redirect to product list view
-        model.addAttribute("message", "Товар успешно добавлен!");
-        return "redirect:/products/catalog"; // Redirect to catalog page after successful addition
-    }
 
     @GetMapping("/add")
-    public String showAddProductForm(Model model) {
-        Product newProduct = new Product();
-        model.addAttribute("product", newProduct);
-        return "products/addProduct";
+    public String addProductForm(Model model) {
+        model.addAttribute("product", new Product());
+        return "products/addProduct"; // Thymeleaf-шаблон
+    }
+
+    // Обработка формы добавления товара
+    @PostMapping("/add")
+    public String addProduct(@ModelAttribute("product") Product product) {
+        productService.saveProduct(product);
+        return "redirect:/products";
     }
 
 
