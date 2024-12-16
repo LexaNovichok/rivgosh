@@ -7,13 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/products")
@@ -28,30 +23,22 @@ public class ProductsController {
     }
 
     @GetMapping({"", "/"})
-    public String getProducts(
-            @RequestParam(required = false) String category,
-            @RequestParam(required = false) String search_q,
+    public String showProductListBySearch(
+            @RequestParam(value = "search_q", required = false) String search,
             Model model) {
+        List<Product> products;
 
-        List<Product> filteredProducts = repo.findAll();
-
-        if (category != null && !category.isEmpty()) {
-            filteredProducts = filteredProducts.stream()
-                    .filter(product -> product.getCategory().equalsIgnoreCase(category))
-                    .toList();
+        if (search != null && !search.isEmpty()) {
+            // Фильтруем товары по названию
+            products = repo.findByNameContainingIgnoreCase(search);
+        } else {
+            // Возвращаем все товары, если поиска нет
+            products = repo.findAll();
         }
 
-        if (search_q != null && !search_q.isEmpty()) {
-            filteredProducts = filteredProducts.stream()
-                    .filter(product -> product.getName().toLowerCase().contains(search_q.toLowerCase()))
-                    .toList();
-        }
-
-        model.addAttribute("products", filteredProducts);
-        model.addAttribute("selectedCategory", category);
+        model.addAttribute("products", products);
         return "products/productsBySearch"; // Thymeleaf-шаблон
     }
-
 
     @GetMapping("/search_suggestions")
     @ResponseBody
@@ -61,35 +48,10 @@ public class ProductsController {
     }
 
 
-
-    @GetMapping("/product/{id}")
-    public String getProduct(@PathVariable Integer id, Model model) {
-        Product product = repo.findById(id)
-                .orElse(null);
-
-
-        if (product == null) {
-            model.addAttribute("errorMessage", "Product not found with id: " + id);
-            return "error";
-        }
-
-        model.addAttribute("product", product);
-        return "products/product";
+    @GetMapping("/catalog")
+    public String showCatalog(Model model) {
+        List<Product> products = productService.getAllProducts();
+        model.addAttribute("products", products);
+        return "catalog";
     }
-
-
-    @GetMapping("/add")
-    public String addProductForm(Model model) {
-        model.addAttribute("product", new Product());
-        return "products/addProduct"; // Thymeleaf-шаблон
-    }
-
-    // Обработка формы добавления товара
-    @PostMapping("/add")
-    public String addProduct(@ModelAttribute("product") Product product) {
-        productService.saveProduct(product);
-        return "redirect:/products";
-    }
-
-
 }

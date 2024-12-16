@@ -4,6 +4,7 @@
   <link rel="icon" type="image/png" href="prefabs/riv-gosh.png">
   <link rel="stylesheet" href="style_catalog.css">
   <meta charset="UTF-8">
+
 </head>
 <body>
 <table border="0" width="1200" cellpadding="0" cellspacing="0" align="center" bgcolor="#ff8000">
@@ -31,142 +32,17 @@
       </table>
     </td>
   </tr>
-
+  <!-- Строка для графы поиска -->
   <tr>
-<!--    <td colspan="4" align="center">-->
-<!--      <div class="search-container">-->
-<!--        <form name="search_form" method="get" action="/products">-->
-<!--          <div>-->
-<!--            <input type="search" id="search-box" name="search_q" class="search-box" placeholder="Введите первую букву товара или услуги...">-->
-<!--            <input type="submit" class="search-button" value="Поиск">-->
-<!--          </div>-->
-
-<!--          <div id="category-form">-->
-<!--            <label for="category">Выберите категорию:</label>-->
-<!--            <select id="category" name="category">-->
-<!--              <option value="" th:selected="${category == null}">Все категории</option>-->
-<!--              <option value="Мужские ароматы" th:selected="${category == 'Мужские ароматы'}">Мужские ароматы</option>-->
-<!--              <option value="Женские ароматы" th:selected="${category == 'Женские ароматы'}">Женские ароматы</option>-->
-<!--              <option value="Нейтральные духи" th:selected="${category == 'Нейтральные духи'}">Нейтральные духи</option>-->
-<!--            </select>-->
-<!--            <button type="submit">Применить</button>-->
-<!--          </div>-->
-<!--        </form>-->
-<!--        <div id="suggestions" class="suggestions" style="display: none;"></div>-->
-<!--      </div>-->
-<!--    </td>-->
-  </tr>
-
-</table>
-
-
-<style>
-  /* Категории */
-  #category-form {
-      display: flex;
-      flex-direction: column; /* Строки располагаются по вертикали */
-      align-items: flex-start; /* Выравнивание по левому краю */
-      gap: 10px; /* Отступ между элементами */
-      padding: 10px;
-      background: #f8f8f8;
-      border-radius: 5px;
-  }
-
-  #category-form select {
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      flex: 1; /* Авторасширение для заполнения доступного пространства */
-  }
-
-  #category-form button {
-      background-color: #f7931e;
-      color: #fff;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-  }
-
-
-  #suggestions {
-  position: absolute;
-  border: 1px solid #ccc;
-  max-height: 200px;
-  overflow-y: auto;
-  width: 1000px; /* Фиксированная ширина контейнера с предложениями */
-  background-color: white;
-  z-index: 1000;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-  .suggestion-item {
-      padding: 8px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      width: 100%;
-      box-sizing: border-box;
-  }
-
-  .suggestion-item:hover {
-      background-color: #f0f0f0;
-  }
-
-  .suggestion-image {
-      width: 50px; /* Размер картинки */
-      height: 50px;
-      margin-right: 20px; /* Расстояние между картинкой и текстом */
-  }
-
-  .suggestion-name {
-      font-size: 16px; /* Размер текста */
-      max-width: calc(100% - 70px); /* Оставляем место для картинки и отступа */
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-  }
-</style>
-
-<table class="custom-nav" border="0" width="1200" cellpadding="5" align="center" bgcolor="ffa756">
-  <tr>
-    <td align="center"><a href="index.html">Главная</a></td>
-    <td align="center"><a href="/products">Каталог</a></td>
-    <td align="center"><a href="contact.html">Контакты</a></td>
-  </tr>
-</table>
-
-<table border="0" width="1200" cellpadding="0" cellspacing="0" align="center" bgcolor="#f8f8f8">
-  <tr>
-
     <td colspan="4" align="center">
       <div class="search-container">
         <form name="search_form" method="get" action="/products">
-          <div>
-            <input type="search" id="search-box" name="search_q" class="search-box" placeholder="Введите первую букву товара или услуги...">
-            <input type="submit" class="search-button" value="Поиск">
-          </div>
-
-          <div id="category-form">
-            <label for="category">Выберите категорию:</label>
-            <select id="category" name="category">
-              <option value="" th:selected="${category == null}">Все категории</option>
-              <option value="Мужские ароматы" th:selected="${category == 'Мужские ароматы'}">Мужские ароматы</option>
-              <option value="Женские ароматы" th:selected="${category == 'Женские ароматы'}">Женские ароматы</option>
-              <option value="Нейтральные духи" th:selected="${category == 'Нейтральные духи'}">Нейтральные духи</option>
-            </select>
-            <button type="submit">Применить</button>
-          </div>
+          <input type="search" id="search-box" name="search_q" class="search-box" placeholder="Введите первую букву товара или услуги..." required>
+          <input type="submit" class="search-button" value="Поиск">
         </form>
         <div id="suggestions" class="suggestions" style="display: none;"></div>
       </div>
-
-      <div class="add-product-button-container">
-        <a href="/products/add" class="add-product-button">Добавить товар</a>
-      </div>
     </td>
-
   </tr>
 </table>
 
@@ -193,8 +69,7 @@
 
                   // Создаем элемент для изображения товара
                   const productImage = document.createElement("img");
-                  productImage.src = `prefabs/${item.image}`;  // Используем изображение товара
-                  console.log(productImage.src);
+                  productImage.src = item.image;  // Используем изображение товара
                   productImage.alt = item.name;
                   productImage.classList.add("suggestion-image");
 
@@ -226,33 +101,87 @@
   });
 </script>
 
+<style>
+  #suggestions {
+  position: absolute;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  width: 1000px; /* Фиксированная ширина контейнера с предложениями */
+  background-color: white;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.suggestion-item {
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+}
+
+.suggestion-image {
+  width: 50px; /* Размер картинки */
+  height: 50px;
+  margin-right: 20px; /* Расстояние между картинкой и текстом */
+}
+
+.suggestion-name {
+  font-size: 16px; /* Размер текста */
+  max-width: calc(100% - 70px); /* Оставляем место для картинки и отступа */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+</style>
+
+
+<table class="custom-nav" border="0" width="1200" cellpadding="5" align="center" bgcolor="ffa756">
+  <tr>
+    <td align="center"><a href="index.html">Главная</a></td>
+    <td align="center"><a href="catalog.html">Каталог</a></td>
+    <td align="center"><a href="contact.html">Контакты</a></td>
+  </tr>
+</table>
+
+
 <BR>
 <table border="0" width="1200" cellpadding="5" align="center">
   <tr>
-    <td>
-      <!-- Каталог товаров -->
-      <table border="0" width="1200" cellpadding="5"  align="center">
-        <tr>
-          <td>
-            <p class="bestsellers"></p>
-            <div class="product-grid">
-              <div class="product-item" th:each="product : ${products}">
-                <a th:href="@{/products/product/{id}(id=${product.id})}" target="_blank">
-                  <img th:src="@{'/prefabs/' + ${product.image}}" th:alt="${product.shortDescription}" class="product-image">
-                </a>
-                <p class="product-name">
-                  <a th:href="@{/products/product/{id}(id=${product.id})}" th:text="${product.name}"></a>
-                </p>
-                <p class="product-price" th:text="${product.price} + ' ₽'">Цена</p>
-                <button class="add-to-cart-btn" th:data-id="${product.id}">Добавить в корзину</button>
-              </div>
-            </div>
-          </td>
-        </tr>
-      </table>
+    <td width="150" cellpadding="5" valign="top" align="center">
+      <a href="aboutUs.html">О нас</a><BR>
+      <a href="history.html">История фирмы</a><BR>
+      <a href="employee.html">Сотрудники</a><BR>
     </td>
+    <td><H1  align="center">Каталог</H1>
+      <hr>
   </tr>
+
+  <!--каталог товаров -->
+  <table border="0" width="900" cellpadding="5"  align="center">
+    <tr>
+      <td>
+        <p class="bestsellers">Результаты поиска</p>
+
+        <div class="product-grid">
+          <div class="product-item" th:each="product : ${products}">
+            <a th:href="@{'/product' + ${product.id} + '.html'}" target="_blank">
+              <img th:src="${product.image}" th:alt="${product.shortDescription}" class="product-image">
+            </a>
+            <p><a th:href="@{'/product' + ${product.id} + '.html'}" th:text="${product.name}"></a></p>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
 </table>
+
 
 <footer class="footer">
   <div>
@@ -269,4 +198,5 @@
 </footer>
 
 </body>
+
 </html>
