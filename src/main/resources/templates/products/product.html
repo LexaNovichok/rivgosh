@@ -104,6 +104,16 @@
         </td>
         <td width="150" valign="top">
             <div class="form-container">
+                <!-- Сообщение об ошибке -->
+                <div th:if="${error}" style="color: red;">
+                    <p th:text="${error}"></p>
+                </div>
+
+                <!-- Сообщение об успешной регистрации -->
+                <div th:if="${success}" style="color: green;">
+                    <p th:text="${success}"></p>
+                </div>
+
                 <!-- Переключатели для формы -->
                 <div class="tab-buttons">
                     <button onclick="showTab('login')">Войти</button>
@@ -121,8 +131,8 @@
                 </div>
 
                 <!-- Форма регистрации -->
-                <div id="register" class="tab-content">
-                    <form action="/register" method="post">
+                <div id="register" class="tab-content" >
+                    <form action="/auth/register" method="post" th:object="${user}">
                         <input type="text" name="username" placeholder="Имя пользователя" required><br>
                         <input type="email" name="email" placeholder="Электронная почта" required><br>
                         <input type="password" name="password" placeholder="Пароль" required><br>
