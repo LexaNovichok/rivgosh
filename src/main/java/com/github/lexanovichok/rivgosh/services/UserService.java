@@ -1,12 +1,21 @@
 package com.github.lexanovichok.rivgosh.services;
 
 import com.github.lexanovichok.rivgosh.model.User;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -33,13 +42,6 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
-//    public void registerUser(String username, String password, Set<String> roles) {
-//        User user = new User();
-//        user.setUsername(username);
-//        user.setPassword(passwordEncoder.encode(password));
-//        user.setRoles(roles);
-//        userRepository.save(user);
-//    }
 
     public boolean registerUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
@@ -59,4 +61,21 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
         return true;
     }
+
+    public boolean authenticate(String username, String password) {
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            // Проверяем пароль
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                // Создаем объект аутентификации с ролью
+                List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_" + user.getRole());
+                Authentication authentication = new UsernamePasswordAuthenticationToken(username, password, authorities);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

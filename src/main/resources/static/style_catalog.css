@@ -59,6 +59,23 @@
         width: 200px;
 }
 
+.edit-button {
+    padding: 5px 10px;
+    background-color: #4B92DB;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
+        transition: background-color 0.3s ease;
+         position: absolute; /* Абсолютное позиционирование */
+            bottom: 105px; /* Устанавливаем кнопку у нижнего края карточки */
+            left: 50%; /* Центрируем кнопку по горизонтали */
+            transform: translateX(-50%); /* Выравнивание по центру */
+            width: 140px;
+}
+
 /* Эффект при наведении на кнопку */
 .add-to-cart-btn:hover {
     background-color: #e67e00;

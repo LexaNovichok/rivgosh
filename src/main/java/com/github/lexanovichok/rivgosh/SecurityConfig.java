@@ -1,9 +1,17 @@
 package com.github.lexanovichok.rivgosh;
 
+import com.github.lexanovichok.rivgosh.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,9 +19,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig  {
+
+
 
     // Используем SecurityFilterChain для настройки безопасности
     @Bean
@@ -25,13 +37,11 @@ public class SecurityConfig  {
                         .requestMatchers("/user/**").hasRole("USER")   // Доступ для пользователей
                         .requestMatchers("/**").permitAll()            // Открытый доступ для всех других
                 )
-                .formLogin(form -> form
-                        .loginPage("/login") // Указываем страницу логина
-                        .permitAll()         // Разрешаем доступ для всех
-                )
                 .logout(logout -> logout
-                        .permitAll()         // Разрешаем доступ для всех
-                );
+                        .logoutUrl("/logout")            // Указываем кастомный путь для выхода
+                        .logoutSuccessUrl("/index.html") // Перенаправление после выхода
+                        .permitAll()                     // Разрешаем доступ для всех
+                );;
         return http.build();
     }
 
@@ -53,6 +63,11 @@ public class SecurityConfig  {
                 throw new UsernameNotFoundException("User not found");
             }
         };
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     // Bean для PasswordEncoder

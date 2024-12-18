@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="${product.name}">AVAVAV</title>
+    <link rel="icon" type="image/png" href="/prefabs/riv-gosh.png">
+    <link rel="stylesheet" th:href="@{/style_product_info.css}">
+    <meta charset="UTF-8">
+</head>
+<body>
+<table border="0" width="1200" cellpadding="0" cellspacing="0" align="center" bgcolor="#ff8000">
+    <tr>
+        <td width="150" align="center"><img src="/prefabs/riv-gosh.png" alt="Логотип" width="90" height="90"></td>
+        <td align="center"><h1>РИВ ГОШ</h1></td>
+        <td width="150"></td>
+    </tr>
+</table>
+
+<table class="custom-nav" border="0" width="1200" cellpadding="5" align="center" bgcolor="ffa756">
+    <tr>
+        <td align="center"><a href="/index.html">Главная</a></td>
+        <td align="center"><a href="/products">Каталог</a></td>
+        <td align="center"><a href="/contact.html">Контакты</a></td>
+    </tr>
+</table>
+<br>
+
+<table border="0" width="1200" cellpadding="5" align="center">
+    <tr>
+        <td width="150" cellpadding="5" valign="top" align="center">
+            <a href="/aboutUs.html">О нас</a><br>
+            <a href="/history.html">История фирмы</a><br>
+            <a href="/employee.html">Сотрудники</a><br>
+        </td>
+        <td>
+            <h1 align="center">Редактирование товара</h1>
+
+            <form action="/update-product" method="post">
+                <label for="name">Название товара:</label><br>
+                <input type="text" id="name" name="name" th:value="${product.name}" required><br><br>
+
+                <label for="shortDescription">Краткое описание:</label><br>
+                <textarea id="shortDescription" name="shortDescription" rows="3" cols="50" th:text="${product.shortDescription}" required></textarea><br><br>
+
+                <label for="longDescription">Подробное описание:</label><br>
+                <textarea id="longDescription" name="longDescription" rows="5" cols="50" th:text="${product.longDescription}" required></textarea><br><br>
+
+                <label for="image">URL изображения:</label><br>
+                <input type="text" id="image" name="image" th:value="${product.image}" required><br><br>
+
+                <label for="volume">Объем:</label><br>
+                <input type="text" id="volume" name="volume" value="100 мл" required><br><br>
+
+                <label for="type">Тип:</label><br>
+                <input type="text" id="type" name="type" value="Туалетная вода" required><br><br>
+
+                <label for="note">Нота:</label><br>
+                <input type="text" id="note" name="note" value="цитрусовые, специи, древесные акценты" required><br><br>
+
+                <label for="country">Страна производства:</label><br>
+                <input type="text" id="country" name="country" value="Франция" required><br><br>
+
+                <input type="hidden" name="id" th:value="${product.id}">
+                <input type="submit" value="Сохранить изменения">
+            </form>
+        </td>
+        <td width="150" valign="top">
+            <div class="form-container">
+                <div th:if="${error}" style="color: red;">
+                    <p th:text="${error}"></p>
+                </div>
+
+                <div th:if="${success}" style="color: green;">
+                    <p th:text="${success}"></p>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>

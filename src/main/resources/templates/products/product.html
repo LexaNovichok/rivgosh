@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title th:text="${product.name}">AVAVAV</title>
     <link rel="icon" type="image/png" href="/prefabs/riv-gosh.png">
@@ -11,7 +11,12 @@
     <tr>
         <td width="150" align="center"><img src="/prefabs/riv-gosh.png" alt="Логотип" width="90" height="90"></td>
         <td align="center"><H1>РИВ ГОШ</H1></td>
-        <td width="150"></td>
+<!--        <td width="150"></td>-->
+        <td>
+            <div sec:authorize="isAuthenticated()">
+                <a href="/logout">Выйти</a>
+            </div>
+        </td>
     </tr>
 </table>
 
@@ -115,24 +120,24 @@
                 </div>
 
                 <!-- Переключатели для формы -->
-                <div class="tab-buttons">
+                <div class="tab-buttons" sec:authorize="!isAuthenticated()">
                     <button onclick="showTab('login')">Войти</button>
                     <span>/</span>
                     <button onclick="showTab('register')">Зарегистрироваться</button>
                 </div>
 
                 <!-- Форма авторизации -->
-                <div id="login" class="tab-content active">
-                    <form action="/login" method="post">
-                        <input type="text" name="login" placeholder="Логин" required><br>
+                <div id="login" class="tab-content active" sec:authorize="!isAuthenticated()">
+                    <form action="/auth/login" method="post" th:object="${user}">
+                        <input type="text" name="username" placeholder="Логин" required><br>
                         <input type="password" name="password" placeholder="Пароль" required><br>
                         <input type="submit" value="Войти">
                     </form>
                 </div>
 
                 <!-- Форма регистрации -->
-                <div id="register" class="tab-content" >
-                    <form action="/auth/register" method="post" th:object="${user}">
+                <div id="register" class="tab-content" sec:authorize="!isAuthenticated()">
+                    <form action="/auth/register" method="post" >
                         <input type="text" name="username" placeholder="Имя пользователя" required><br>
                         <input type="email" name="email" placeholder="Электронная почта" required><br>
                         <input type="password" name="password" placeholder="Пароль" required><br>

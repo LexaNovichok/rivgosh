@@ -1,4 +1,5 @@
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
   <title>Рив Гош</title>
   <link rel="icon" type="image/png" href="prefabs/riv-gosh.png">
@@ -31,32 +32,6 @@
       </table>
     </td>
   </tr>
-
-  <tr>
-<!--    <td colspan="4" align="center">-->
-<!--      <div class="search-container">-->
-<!--        <form name="search_form" method="get" action="/products">-->
-<!--          <div>-->
-<!--            <input type="search" id="search-box" name="search_q" class="search-box" placeholder="Введите первую букву товара или услуги...">-->
-<!--            <input type="submit" class="search-button" value="Поиск">-->
-<!--          </div>-->
-
-<!--          <div id="category-form">-->
-<!--            <label for="category">Выберите категорию:</label>-->
-<!--            <select id="category" name="category">-->
-<!--              <option value="" th:selected="${category == null}">Все категории</option>-->
-<!--              <option value="Мужские ароматы" th:selected="${category == 'Мужские ароматы'}">Мужские ароматы</option>-->
-<!--              <option value="Женские ароматы" th:selected="${category == 'Женские ароматы'}">Женские ароматы</option>-->
-<!--              <option value="Нейтральные духи" th:selected="${category == 'Нейтральные духи'}">Нейтральные духи</option>-->
-<!--            </select>-->
-<!--            <button type="submit">Применить</button>-->
-<!--          </div>-->
-<!--        </form>-->
-<!--        <div id="suggestions" class="suggestions" style="display: none;"></div>-->
-<!--      </div>-->
-<!--    </td>-->
-  </tr>
-
 </table>
 
 
@@ -163,7 +138,8 @@
       </div>
 
       <div class="add-product-button-container">
-        <a href="/products/add" class="add-product-button">Добавить товар</a>
+        <a class="edit-button" th:href="@{/products/productEdit/{id}(id=${product.id})}"
+           th:if="${isAdmin}">Редактировать</a>
       </div>
     </td>
 
@@ -244,7 +220,9 @@
                   <a th:href="@{/products/product/{id}(id=${product.id})}" th:text="${product.name}"></a>
                 </p>
                 <p class="product-price" th:text="${product.price} + ' ₽'">Цена</p>
-                <button class="add-to-cart-btn" th:data-id="${product.id}">Добавить в корзину</button>
+                <button class="add-to-cart-btn" th:data-id="${product.id}" >Добавить в корзину</button>
+                <a class="edit-button" th:href="@{/products/productEdit/{id}(id=${product.id})}"
+                   th:if="${#authentication != null and #authentication.hasRole('Admin')}">Редактировать</a>
               </div>
             </div>
           </td>
