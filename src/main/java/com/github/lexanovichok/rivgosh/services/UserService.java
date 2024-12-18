@@ -1,6 +1,10 @@
 package com.github.lexanovichok.rivgosh.services;
 
 import com.github.lexanovichok.rivgosh.model.User;
+import com.github.lexanovichok.rivgosh.model.UserRole;
+import jakarta.annotation.PostConstruct;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,68 +18,40 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class UserService implements UserDetailsService {
+@AllArgsConstructor
+public class UserService {
 
-    private final UserRepository userRepository;
+    private static List<User> users = new ArrayList<>();
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+
+    @PostConstruct
+    public void postConstruct() {
+        User user = new User();
+        user.setRole(UserRole.ADMIN);
+        user.setUsername("admin");
+        user.setPassword(passwordEncoder.encode("abc"));
+        users.add(user);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getUsername())
-                .password(user.getPassword())
-                // Теперь передаем роль как строку
-                .roles(user.getRole())
-                .build();
+    public User findByLogin(String login) {
+        return users.stream().filter(user -> user.getUsername().equals(login))
+                .findFirst()
+                .orElse(null);
     }
 
 
-    public boolean registerUser(User user) {
-        if (userRepository.existsByUsername(user.getUsername())) {
-            return false;
-        }
-
-        if (userRepository.existsByEmail(user.getEmail())) {
-            return false;
-        }
-
+    public void register(User user) {
+        user.setRole(UserRole.USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        if (user.getRole() == null || user.getRole().isEmpty()) {
-            user.setRole("user");
-        }
-
-        userRepository.save(user);
-        return true;
+        users.add(user);
     }
 
-    public boolean authenticate(String username, String password) {
-        Optional<User> userOpt = userRepository.findByUsername(username);
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            // Проверяем пароль
-            if (passwordEncoder.matches(password, user.getPassword())) {
-                // Создаем объект аутентификации с ролью
-                List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_" + user.getRole());
-                Authentication authentication = new UsernamePasswordAuthenticationToken(username, password, authorities);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                return true;
-            }
-        }
-        return false;
-    }
 
 }

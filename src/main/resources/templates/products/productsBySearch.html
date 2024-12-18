@@ -1,5 +1,4 @@
-<html xmlns:th="http://www.w3.org/1999/xhtml"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <title>Рив Гош</title>
   <link rel="icon" type="image/png" href="prefabs/riv-gosh.png">
@@ -18,19 +17,14 @@
       <h1>РИВ ГОШ</h1>
     </td>
     <!-- Логин/Пароль -->
-    <td width="200">
-      <table cellpadding="5" width="100%">
-        <tr>
-          <td align="right"><input type="text" value="Логин"></td>
-        </tr>
-        <tr>
-          <td align="right"><input type="password" value="Пароль"></td>
-        </tr>
-        <tr>
-          <td align="right"><input type="submit" value="Войти"></td>
-        </tr>
-      </table>
-    </td>
+    <td class="buttons" width="200">
+      <div sec:authorize="!isAuthenticated()">
+        <a href="/login" class="button">Войти</a>
+        <a href="/registration" class="button">Зарегистрироваться</a>
+      </div>
+      <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Выйти">
+      </form>
   </tr>
 </table>
 
@@ -221,8 +215,7 @@
                 </p>
                 <p class="product-price" th:text="${product.price} + ' ₽'">Цена</p>
                 <button class="add-to-cart-btn" th:data-id="${product.id}" >Добавить в корзину</button>
-                <a class="edit-button" th:href="@{/products/productEdit/{id}(id=${product.id})}"
-                   th:if="${#authentication != null and #authentication.hasRole('Admin')}">Редактировать</a>
+                <a class="edit-button" th:href="@{/products/productEdit/{id}(id=${product.id})}" sec:authorize="hasRole('ADMIN')">Редактировать</a>
               </div>
             </div>
           </td>

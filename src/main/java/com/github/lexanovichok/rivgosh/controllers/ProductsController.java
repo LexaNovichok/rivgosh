@@ -4,7 +4,6 @@ import com.github.lexanovichok.rivgosh.model.Product;
 import com.github.lexanovichok.rivgosh.model.User;
 import com.github.lexanovichok.rivgosh.services.ProductService;
 import com.github.lexanovichok.rivgosh.services.ProductsRepository;
-import com.github.lexanovichok.rivgosh.services.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -27,7 +26,6 @@ public class ProductsController {
     @Autowired
     private ProductsRepository repo;
     @Autowired
-    private UserRepository userRepo;
 
     public ProductsController(ProductService productService) {
         this.productService = productService;
@@ -39,14 +37,14 @@ public class ProductsController {
             @RequestParam(required = false) String search_q,
             Model model, Authentication authentication) {
 
-        String username = null;
-        boolean isAdmin = false;
-
-        if (authentication != null) {
-            username = authentication.getName();
-            Optional<User> userOpt = userRepo.findByUsername(username);
-            isAdmin = userOpt.isPresent() && "admin".equalsIgnoreCase(userOpt.get().getRole());
-        }
+//        String username = null;
+//        boolean isAdmin = false;
+//
+//        if (authentication != null) {
+//            username = authentication.getName();
+//            User userOpt = userRepo.findByUsername(username);
+//            isAdmin = userOpt.isPresent() && "admin".equalsIgnoreCase(userOpt.get().getRole());
+//        }
 
 
         List<Product> filteredProducts = repo.findAll();
@@ -66,7 +64,7 @@ public class ProductsController {
 
         model.addAttribute("products", filteredProducts);
         model.addAttribute("selectedCategory", category);
-        model.addAttribute("isAdmin", isAdmin);
+        //model.addAttribute("isAdmin", isAdmin);
         return "products/productsBySearch"; // Thymeleaf-шаблон
     }
 

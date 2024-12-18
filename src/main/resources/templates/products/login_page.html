@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+    <style>
+        body {
+            background-color: #f8f8f8;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-container {
+            text-align: center;
+            padding: 40px;
+            max-width: 400px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .form-container input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .form-container input[type="submit"] {
+            background-color: #ff8000;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .form-container input[type="submit"]:hover {
+            background-color: #e67e22;
+        }
+
+        .messages {
+            text-align: center;
+            color: #ff5733;
+            margin-bottom: 20px;
+        }
+
+        a {
+            color: #333333;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #ff8000;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Login</h2>
+
+    <div class="messages" th:if="${param.success}">
+        Вы успешно зарегистрированы. Пожалуйста, войдите в аккаунт
+    </div>
+    <div class="messages" th:if="${param.error}">
+        Логин или пароль неправильные
+    </div>
+    <div class="messages" th:if="${param.logout}">
+        Вы успешно вышли их аккаунта
+    </div>
+
+    <form th:action="@{/login}" method="post">
+        <input name="username" type="text" placeholder="Username" required>
+        <input name="password" type="password" placeholder="Password" required>
+        <input type="submit" value="Log in">
+    </form>
+
+    <div>
+        <a href="@{/products}">Каталог продуктов</a>
+        <a href="/registration">Зарегистрироваться</a>
+    </div>
+</div>
+
+</body>
+</html>

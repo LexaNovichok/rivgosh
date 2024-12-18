@@ -128,7 +128,8 @@
 
                 <!-- Форма авторизации -->
                 <div id="login" class="tab-content active" sec:authorize="!isAuthenticated()">
-                    <form action="/auth/login" method="post" th:object="${user}">
+<!--                    th:action="@{/login}" method="post"-->
+                    <form >
                         <input type="text" name="username" placeholder="Логин" required><br>
                         <input type="password" name="password" placeholder="Пароль" required><br>
                         <input type="submit" value="Войти">
@@ -137,7 +138,8 @@
 
                 <!-- Форма регистрации -->
                 <div id="register" class="tab-content" sec:authorize="!isAuthenticated()">
-                    <form action="/auth/register" method="post" >
+<!--                    action="/auth/register" method="post"-->
+                    <form>
                         <input type="text" name="username" placeholder="Имя пользователя" required><br>
                         <input type="email" name="email" placeholder="Электронная почта" required><br>
                         <input type="password" name="password" placeholder="Пароль" required><br>
